@@ -41,7 +41,7 @@ pipeline {
           }
         }
 
-  stage ('Starting Docker Image') {
+    stage ('Starting Docker Image') {
           steps {
               sh '''
               if ( docker ps|grep clixx-cont ) then
@@ -71,7 +71,7 @@ pipeline {
           }
         }
 
-      stage ('Configure DB Instance') {
+    stage ('Configure DB Instance') {
           steps {
             script {
                 def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
@@ -90,6 +90,24 @@ pipeline {
           }
         }
 
+    stage ('Tear Down CliXX Docker Image and Database') {
+          steps {
+             script {
+                def userInput = input(id: 'confirm', message: 'Tear Down Environment?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Tear Down Environment?', name: 'confirm'] ])
+             }
+              sh '''
+            python3 -m venv python3-virtualenv
+            source python3-virtualenv/bin/activate
+            python3 --version
+            pip3 install boto3 botocore boto
+            ansible-playbook $WORKSPACE/deploy_db_ansible/delete_db.yml
+            deactivate
+            docker stop clixx-cont
+            docker rm  clixx-cont
+
+              '''
+          }
+        }
 
     }
 }
