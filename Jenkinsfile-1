@@ -54,7 +54,42 @@ pipeline {
               fi
               '''
           }
+    
         }
+
+    stage ('Restore CliXX Database') {
+          steps {
+              sh '''
+            python3 -m venv python3-virtualenv
+            source python3-virtualenv/bin/activate
+            python3 --version
+            pip3 install boto3 botocore boto
+            ansible-playbook $WORKSPACE/deploy_db_ansible/deploy_db.yml
+            deactivate
+
+              '''
+          }
+        }
+
+      stage ('Configure DB Instance') {
+          steps {
+            script {
+                def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
+             }
+              sh '''
+               USERNAME='wordpressuser'
+               PASSWORD='W3lcome123'
+               DBNAME='wordpressdb'
+               SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
+               SERVER_INSTANCE='wordpressdbclixxjenkins.cd7numzl1xfe.us-east-1.rds.amazonaws.com'
+               echo "use wordpressdb;" >> ./db.setup
+               echo "UPDATE wp_options SET option_value = '$SERVER_IP' WHERE option_value LIKE 'http%'; " >> ./db.setup
+               mysql -u $USERNAME --password=$PASSWORD -h $SERVER_INSTANCE  -D  $DBNAME < ./db.setup
+
+              '''
+          }
+        }
+
 
     }
 }
