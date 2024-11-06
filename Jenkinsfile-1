@@ -127,6 +127,7 @@ pipeline {
                 docker tag clixx-image:$VERSION 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository/clixx-repository:clixx-image-$VERSION
                 docker tag clixx-image:latest 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository/clixx-repository:clixx-image-$VERSION
                 docker push 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:clixx-image-$VERSION
+                docker push 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:clixx-image-latest
               '''
           }
         }
