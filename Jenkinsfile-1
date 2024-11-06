@@ -87,6 +87,7 @@ pipeline {
                
                echo "use wordpressdb;" > ./db.setup
                echo "UPDATE wp_options SET option_value = '$SERVER_IP' WHERE option_value LIKE 'http%';" >> ./db.setup
+               echo "commit;" >> ./db.setup
                mysql -u "$USERNAME" --password="$PASSWORD" -h "$SERVER_INSTANCE" -D "$DBNAME" < ./db.setup
 
               '''
