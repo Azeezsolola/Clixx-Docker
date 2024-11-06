@@ -85,7 +85,7 @@ pipeline {
               SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
               SERVER_INSTANCE='wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com'
                
-              mysql -u wordpressuser -pW3lcome123 -h wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com -D wordpressdb <<EOF
+              mysql -u wordpressuser -pW3lcome123 -h wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com -D wordpressdb<<EOF
               UPDATE wp_options SET option_value = '${SERVER_IP}' WHERE option_value LIKE 'CliXX-APP%';
               COMMIT;
               EOF
