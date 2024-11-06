@@ -3,6 +3,7 @@
     hosts: localhost
     connection: local
     become: true
+    ansible_become_user: root
     vars:
       instance_id: wordpressdbclixxjenkins
       db_snapshot: wordpressdbclixxsnap
