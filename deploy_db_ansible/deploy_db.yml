@@ -2,7 +2,7 @@
   - name: "CliXX DB Deployment Ansible Playbook"
     hosts: localhost
     connection: local
-    become: ec2-user
+    become: true
     vars:
       instance_id: wordpressdbclixxjenkins
       db_snapshot: wordpressdbclixxsnap
