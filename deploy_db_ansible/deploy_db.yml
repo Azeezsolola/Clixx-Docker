@@ -5,8 +5,8 @@
     #become: true
     #ansible_become_user: root
     vars:
-      instance_id: wordpressdbclixxjenkins
-      db_snapshot: wordpressdbclixxsnap
+      instance_id: wordpressdbclixx-ecs2
+      db_snapshot: wordpressclixxdb
       security_group: sg-00492b168e6908306
     tasks:
        - name: Restore DB from snapshot
