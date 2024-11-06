@@ -85,7 +85,7 @@ pipeline {
                SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
                SERVER_INSTANCE='wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com'
                
-               echo "use wordpressdb;" >> ./db.setup
+               echo "use wordpressdb;" > ./db.setup
                echo "UPDATE wp_options SET option_value = '$SERVER_IP' WHERE option_value LIKE 'http%'; " >> ./db.setup
                mysql -u $USERNAME --password=$PASSWORD -h $SERVER_INSTANCE  -D  $DBNAME < ./db.setup
 
