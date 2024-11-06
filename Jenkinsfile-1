@@ -38,6 +38,7 @@ pipeline {
             }
              //sh "${dockerHome}/bin/docker build . -t clixx-image:$VERSION "
             sh "docker build . -t clixx-image:$VERSION "
+            sh "docker tag clixx-image:$VERSION clixx-image:latest"
           }
         }
 
