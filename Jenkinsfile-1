@@ -92,7 +92,7 @@ pipeline {
               echo "commit;" >> ./db.setup
               mysql -u "$USERNAME" --password="$PASSWORD" -h "$SERVER_INSTANCE" -D "$DBNAME" < ./db.setup
 
-              '''
+            '''
           }
         }
 
