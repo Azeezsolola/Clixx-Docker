@@ -3,7 +3,7 @@
     hosts: localhost
     connection: local
     vars:
-      instance_id: wordpressdbclixxjenkins
+      instance_id: wordpressdbclixx-ecs
     tasks:
 
       - name: remove a db instance without taking a final snapshot
