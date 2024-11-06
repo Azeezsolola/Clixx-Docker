@@ -5,8 +5,8 @@
     #become: true
     #ansible_become_user: root
     vars:
-      instance_id: wordpressdbclixx-ecs2
-      db_snapshot: wordpressclixxdb
+      instance_id: wordpressdbclixx-ecs
+      db_snapshot: wordpressdb2
       security_group: sg-00492b168e6908306
     tasks:
        - name: Restore DB from snapshot
@@ -17,7 +17,7 @@
            instance_name: '{{ instance_id }}'
            region: us-east-1
            wait: yes
-           instance_type: db.t2.small
+           instance_type: db.m7g.large
            wait_timeout: 1200
        - name: Modify to add SG
          local_action:
