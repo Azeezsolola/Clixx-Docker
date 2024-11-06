@@ -79,16 +79,16 @@ pipeline {
                 def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
              }
               sh '''
-               USERNAME='wordpressuser'
-               PASSWORD='W3lcome123'
-               DBNAME='wordpressdb'
-               SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
-               SERVER_INSTANCE='wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com'
+              USERNAME='wordpressuser'
+              PASSWORD='W3lcome123'
+              DBNAME='wordpressdb'
+              SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
+              SERVER_INSTANCE='wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com'
                
-               mysql -u wordpressuser -pW3lcome123 -h wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com -D wordpressdb <<EOF
-               UPDATE wp_options SET option_value = '${SERVER_IP}' WHERE option_value LIKE 'CliXX-APP%';
-               COMMIT;
-               EOF
+              mysql -u wordpressuser -pW3lcome123 -h wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com -D wordpressdb <<EOF
+              UPDATE wp_options SET option_value = '${SERVER_IP}' WHERE option_value LIKE 'CliXX-APP%';
+              COMMIT;
+              EOF
 
                #echo "use wordpressdb;" > ./db.setup
                #echo "UPDATE wp_options SET option_value = '$SERVER_IP' WHERE option_value LIKE 'http%';" >> ./db.setup
