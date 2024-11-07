@@ -80,7 +80,12 @@ pipeline {
                 def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
              }
               sh '''
-              
+              USERNAME="${DB_USER_NAME}"
+              PASSWORD="${DB_PASSWORD}"
+              DBNAME="${DB_NAME}"
+              SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
+              SERVERINSTANCE="${SERVER_INSTANCE}"
+
               SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
               
                
@@ -89,7 +94,7 @@ pipeline {
               echo "use wordpressdb;" > ./db.setup
               echo "UPDATE wp_options SET option_value = '$SERVER_IP' WHERE option_value LIKE 'CliXX-APP-%';" >> ./db.setup
               echo "commit;" >> ./db.setup
-              mysql -u "$USERNAME" --password="$PASSWORD" -h "$SERVER_INSTANCE" -D "$DBNAME" < ./db.setup
+              mysql -u "$USERNAME" --password="$PASSWORD" -h "$SERVERINSTANCE" -D "$DBNAME" < ./db.setup
 
             '''
           }
@@ -121,6 +126,7 @@ pipeline {
                 def userInput = input(id: 'confirm', message: 'Push Image To ECR?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Push to ECR?', name: 'confirm'] ])
              }
               sh '''
+                ECR_URL="${ECR_REPO}"
                 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}
                 docker tag clixx-image:$VERSION ${ECR_URL}:clixx-image-$VERSION
                 docker tag clixx-image:$VERSION ${ECR_ULR}:latest
