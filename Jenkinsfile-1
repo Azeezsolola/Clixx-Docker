@@ -80,11 +80,9 @@ pipeline {
                 def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
              }
               sh '''
-              USERNAME='wordpressuser'
-              PASSWORD='W3lcome123'
-              DBNAME='wordpressdb'
+              
               SERVER_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
-              SERVER_INSTANCE='wordpressdbclixx-ecs.cj862kgs4hm7.us-east-1.rds.amazonaws.com'
+              
                
        
 
@@ -123,14 +121,14 @@ pipeline {
                 def userInput = input(id: 'confirm', message: 'Push Image To ECR?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Push to ECR?', name: 'confirm'] ])
              }
               sh '''
-                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository/clixx-repository
-                docker tag clixx-image:$VERSION 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:clixx-image-$VERSION
-                docker tag clixx-image:$VERSION 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:latest
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}
+                docker tag clixx-image:$VERSION ${ECR_URL}:clixx-image-$VERSION
+                docker tag clixx-image:$VERSION ${ECR_ULR}:latest
                 
                 
                 docker images
-                docker push 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:clixx-image-$VERSION
-                docker push 920373034001.dkr.ecr.us-east-1.amazonaws.com/clixx-repository:latest
+                docker push ${ECR_URL}:clixx-image-$VERSION
+                docker push ${ECR_URL}:latest
                 
               '''
           }
