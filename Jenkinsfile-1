@@ -79,6 +79,10 @@ pipeline {
             script {
                 def userInput = input(id: 'confirm', message: 'Is DB creation complete?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Complete?', name: 'confirm'] ])
              }
+             withCredentials([string(credentialsId: 'DB_USER_NAME', variable: 'DB_USER_NAME'),
+                                 string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD'),
+                                 string(credentialsId: 'DB_NAME', variable: 'DB_NAME'),
+                                 string(credentialsId: 'SERVER_INSTANCE', variable: 'SERVER_INSTANCE')]){
               sh '''
               USERNAME="${DB_USER_NAME}"
               PASSWORD="${DB_PASSWORD}"
@@ -97,6 +101,7 @@ pipeline {
               mysql -u "$USERNAME" --password="$PASSWORD" -h "$SERVERINSTANCE" -D "$DBNAME" < ./db.setup
 
             '''
+            }
           }
         }
 
@@ -125,11 +130,12 @@ pipeline {
              script {
                 def userInput = input(id: 'confirm', message: 'Push Image To ECR?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Push to ECR?', name: 'confirm'] ])
              }
+             withCredentials([string(credentialsId: 'ECR_REPO', variable: 'ECR_REPO')]) {
               sh '''
                 ECR_URL="${ECR_REPO}"
                 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}
                 docker tag clixx-image:$VERSION ${ECR_URL}:clixx-image-$VERSION
-                docker tag clixx-image:$VERSION ${ECR_ULR}:latest
+                docker tag clixx-image:$VERSION ${ECR_URL}:latest
                 
                 
                 docker images
@@ -137,6 +143,7 @@ pipeline {
                 docker push ${ECR_URL}:latest
                 
               '''
+             }
           }
         }
 
