@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        jdk 'JDK11'  // Use the name you gave your JDK in the Global Tool Configuration
+        }
     environment {
         VERSION = "1.0.${BUILD_NUMBER}"
         PATH = "${PATH}:${getSonarPath()}:${getDockerPath()}"
