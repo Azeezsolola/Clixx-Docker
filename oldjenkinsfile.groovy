@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        jdk 'JDK11'  // Use the name you gave your JDK in the Global Tool Configuration
-        }
+
     environment {
         VERSION = "1.0.${BUILD_NUMBER}"
         PATH = "${PATH}:${getSonarPath()}:${getDockerPath()}"
@@ -28,7 +26,7 @@ pipeline {
  stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
-                   // waitForQualityGate abortPipeline: true
+                    waitForQualityGate abortPipeline: true
             }
             }
         }
@@ -65,7 +63,7 @@ pipeline {
               sh '''
             python3 -m venv python3-virtualenv
             source python3-virtualenv/bin/activate
-            python3 --version
+            python3 --version 
             pip3 install --upgrade pip
             pip3 install ansible
             pip3 install boto3 botocore boto
@@ -162,3 +160,11 @@ def getDockerPath(){
         return DockerHome
     }
     
+
+
+
+
+
+
+
+
